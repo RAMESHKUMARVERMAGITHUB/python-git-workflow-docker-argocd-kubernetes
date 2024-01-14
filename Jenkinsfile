@@ -15,14 +15,14 @@ pipeline{
         }
         stage('Checkout from Git'){
             steps{
-                git branch: 'main', url: 'https://github.com/rameshkumarvermagithub/flaskapp.git'
+                git branch: 'main', url: 'https://github.com/rameshkumarvermagithub/python-git-workflow-docker-argocd-kubernetes.git'
             }
         }
         stage("Sonarqube Analysis "){
             steps{
                 withSonarQubeEnv('sonar-server') {
-                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=flaskapp \
-                    -Dsonar.projectKey=flaskapp'''
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=app \
+                    -Dsonar.projectKey=app'''
                 }
             }
         }
@@ -53,23 +53,23 @@ pipeline{
             steps{
                 script{
                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
-                       sh "docker build -t flaskapp ."
-                       sh "docker tag flaskapp rameshkumarverma/flaskapp:latest"
-                       sh "docker push rameshkumarverma/flaskapp:latest"
+                       sh "docker build -t app ."
+                       sh "docker tag flaskapp rameshkumarverma/app:latest"
+                       sh "docker push rameshkumarverma/app:latest"
                     }
                 }
             }
         }
         stage("TRIVY"){
             steps{
-                sh "trivy image rameshkumarverma/flaskapp:latest > trivyimage.txt"
+                sh "trivy image rameshkumarverma/pp:latest > trivyimage.txt"
             }
         }
         // stage("deploy_docker"){
         //     steps{
         //         sh "docker stop flaskapp || true"  // Stop the container if it's running, ignore errors
         //         sh "docker rm flaskapp || true" 
-        //         sh "docker run -d --name amazon -p 4000:3000 rameshkumarverma/flaskapp:latest"
+        //         sh "docker run -d --name amazon -p 4000:3000 rameshkumarverma/app:latest"
         //     }
         // }
       stage('Deploy to Kubernetes') {
