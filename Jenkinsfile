@@ -15,7 +15,7 @@ pipeline{
         }
         stage('Checkout from Git'){
             steps{
-                git branch: 'main', url: 'https://github.com/rameshkumarvermagithub/python-git-workflow-docker-argocd-kubernetes.git'
+                git branch: 'master', url: 'https://github.com/rameshkumarvermagithub/python-git-workflow-docker-argocd-kubernetes.git'
             }
         }
         stage("Sonarqube Analysis "){
